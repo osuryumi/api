@@ -273,7 +273,7 @@ func genModeClauseRx(md common.MethodData) string {
 	if md.Query("mode") != "" {
 		m, err := strconv.Atoi(md.Query("mode"))
 		if err == nil && m >= 0 && m <= 3 {
-			modeClause = fmt.Sprintf("AND scores_relac.play_mode = '%d'", m)
+			modeClause = fmt.Sprintf("AND scores_relax.play_mode = '%d'", m)
 		}
 	}
 	return modeClause
