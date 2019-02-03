@@ -11,7 +11,7 @@ import (
 	"gopkg.in/redis.v5"
 	"zxq.co/ripple/rippleapi/app/internals"
 	"zxq.co/ripple/rippleapi/app/peppy"
-	"github.com/qewc/api/app/v1"
+	"zxq.co/ripple/rippleapi/app/v1"
 	"zxq.co/ripple/rippleapi/app/websockets"
 	"zxq.co/ripple/rippleapi/common"
 	)
@@ -108,10 +108,10 @@ func Start(conf common.Conf, dbO *sqlx.DB) *fhr.Router {
 		r.Method("/api/v1/beatmaps/rank_requests/status", v1.BeatmapRankRequestsStatusGET)
 
 		// Other leaderboard memes
-		r.Method("/api/v1/users/scores/best/relax", v1.UserScoresBestRelaxGET)
-		r.Method("/api/v1/users/scores/recent/relax", v1.UserScoresRecentRelaxGET)
-		r.Method("/api/v1/users/scores/best/ap", v1.UserScoresBestAPGET)
-		r.Method("/api/v1/users/scores/recent/ap", v1.UserScoresRecentAPGET)
+		r.Method("/api/v1/users/scores/relax/best", v1.UserScoresBestRelaxGET)
+		r.Method("/api/v1/users/scores/relax/recent", v1.UserScoresRecentRelaxGET)
+		r.Method("/api/v1/users/scores/ap/best", v1.UserScoresBestAPGET)
+		r.Method("/api/v1/users/scores/ap/recent", v1.UserScoresRecentAPGET)
 		
 		// ReadConfidential privilege required
 		r.Method("/api/v1/friends", v1.FriendsGET, common.PrivilegeReadConfidential)
