@@ -9,17 +9,17 @@ import (
 	"zxq.co/x/getrank"
 )
 
-type userScore struct {
+type userScoreRx struct {
 	Score
 	Beatmap beatmap `json:"beatmap"`
 }
 
-type userScoresResponse struct {
+type userScoresResponseRx struct {
 	common.ResponseBase
-	Scores []userScore `json:"scores"`
+	Scores []userScoreRx `json:"scores"`
 }
 
-const userScoreSelectBase = `
+const userScoreSelectBaseRelax = `
 SELECT
 	scores_relax.id, scores_relax.beatmap_md5, scores_relax.score,
 	scores_relax.max_combo, scores_relax.full_combo, scores_relax.mods,
@@ -50,7 +50,7 @@ func UserScoresBestRelaxGET(md common.MethodData) common.CodeMessager {
 	if getMode(md.Query("mode")) != "ctb" {
 		mc += " AND scores_relax.pp > 0"
 	}
-	return scoresPuts(md, fmt.Sprintf(
+	return scoresPutsRx(md, fmt.Sprintf(
 		`WHERE
 			scores_relax.completed = '3'
 			AND %s
@@ -67,7 +67,7 @@ func UserScoresRecentRelaxGET(md common.MethodData) common.CodeMessager {
 	if cm != nil {
 		return *cm
 	}
-	return scoresPuts(md, fmt.Sprintf(
+	return scoresPutsRx(md, fmt.Sprintf(
 		`WHERE
 			%s
 			%s
@@ -77,16 +77,16 @@ func UserScoresRecentRelaxGET(md common.MethodData) common.CodeMessager {
 	), param)
 }
 
-func scoresPuts(md common.MethodData, whereClause string, params ...interface{}) common.CodeMessager {
-	rows, err := md.DB.Query(userScoreSelectBase+whereClause, params...)
+func scoresPutsRx(md common.MethodData, whereClause string, params ...interface{}) common.CodeMessager {
+	rows, err := md.DB.Query(userScoreSelectBaseRelax+whereClause, params...)
 	if err != nil {
 		md.Err(err)
 		return Err500
 	}
-	var scores []userScore
+	var scores []userScoreRx
 	for rows.Next() {
 		var (
-			us userScore
+			us userScoreRx
 			b  beatmap
 		)
 		err = rows.Scan(
@@ -120,7 +120,7 @@ func scoresPuts(md common.MethodData, whereClause string, params ...interface{})
 		))
 		scores = append(scores, us)
 	}
-	r := userScoresResponse{}
+	r := userScoresResponseRx{}
 	r.Code = 200
 	r.Scores = scores
 	return r
