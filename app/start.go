@@ -107,6 +107,12 @@ func Start(conf common.Conf, dbO *sqlx.DB) *fhr.Router {
 		r.Method("/api/v1/scores", v1.ScoresGET)
 		r.Method("/api/v1/beatmaps/rank_requests/status", v1.BeatmapRankRequestsStatusGET)
 
+		// Other leaderboard memes
+		r.Method("/api/v1/users/scores/best/relax", v1.UserScoresBestRelaxGET)
+		r.Method("/api/v1/users/scores/recent/relax", v1.UserScoresRecentRelaxGET)
+		r.Method("/api/v1/users/scores/best/ap", v1.UserScoresBestAPGET)
+		r.Method("/api/v1/users/scores/recent/ap", v1.UserScoresRecentAPGET)
+		
 		// ReadConfidential privilege required
 		r.Method("/api/v1/friends", v1.FriendsGET, common.PrivilegeReadConfidential)
 		r.Method("/api/v1/friends/with", v1.FriendsWithGET, common.PrivilegeReadConfidential)
