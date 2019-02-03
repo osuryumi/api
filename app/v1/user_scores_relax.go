@@ -45,7 +45,7 @@ func UserScoresBestRelaxGET(md common.MethodData) common.CodeMessager {
 	if cm != nil {
 		return *cm
 	}
-	mc := genModeClause(md)
+	mc := genModeClauseRx(md)
 	// For all modes that have PP, we leave out 0 PP scores_relax.
 	if getMode(md.Query("mode")) != "ctb" {
 		mc += " AND scores_relax.pp > 0"
@@ -73,7 +73,7 @@ func UserScoresRecentRelaxGET(md common.MethodData) common.CodeMessager {
 			%s
 			AND `+md.User.OnlyUserPublic(true)+`
 		ORDER BY scores_relax.id DESC %s`,
-		wc, genModeClause(md), common.Paginate(md.Query("p"), md.Query("l"), 100),
+		wc, genModeClauseRx(md), common.Paginate(md.Query("p"), md.Query("l"), 100),
 	), param)
 }
 

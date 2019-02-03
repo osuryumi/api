@@ -45,7 +45,7 @@ func UserScoresBestAPGET(md common.MethodData) common.CodeMessager {
 	if cm != nil {
 		return *cm
 	}
-	mc := genModeClause(md)
+	mc := genModeClauseAp(md)
 	// For all modes that have PP, we leave out 0 PP scores_auto.
 	if getMode(md.Query("mode")) != "ctb" {
 		mc += " AND scores_auto.pp > 0"
@@ -73,7 +73,7 @@ func UserScoresRecentAPGET(md common.MethodData) common.CodeMessager {
 			%s
 			AND `+md.User.OnlyUserPublic(true)+`
 		ORDER BY scores_auto.id DESC %s`,
-		wc, genModeClause(md), common.Paginate(md.Query("p"), md.Query("l"), 100),
+		wc, genModeClauseAp(md), common.Paginate(md.Query("p"), md.Query("l"), 100),
 	), param)
 }
 

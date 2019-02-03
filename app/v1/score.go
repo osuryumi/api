@@ -267,3 +267,25 @@ func genModeClause(md common.MethodData) string {
 	}
 	return modeClause
 }
+
+func genModeClauseRx(md common.MethodData) string {
+	var modeClause string
+	if md.Query("mode") != "" {
+		m, err := strconv.Atoi(md.Query("mode"))
+		if err == nil && m >= 0 && m <= 3 {
+			modeClause = fmt.Sprintf("AND scores_relac.play_mode = '%d'", m)
+		}
+	}
+	return modeClause
+}
+
+func genModeClauseAp(md common.MethodData) string {
+	var modeClause string
+	if md.Query("mode") != "" {
+		m, err := strconv.Atoi(md.Query("mode"))
+		if err == nil && m >= 0 && m <= 3 {
+			modeClause = fmt.Sprintf("AND scores_auto.play_mode = '%d'", m)
+		}
+	}
+	return modeClause
+}
