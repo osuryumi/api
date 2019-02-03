@@ -33,7 +33,7 @@ SELECT
 	beatmaps.difficulty_taiko, beatmaps.difficulty_ctb, beatmaps.difficulty_mania,
 	beatmaps.max_combo, beatmaps.hit_length, beatmaps.ranked,
 	beatmaps.ranked_status_freezed, beatmaps.latest_update
-FROM scores
+FROM scores_auto
 INNER JOIN beatmaps ON beatmaps.beatmap_md5 = scores_auto.beatmap_md5
 INNER JOIN users ON users.id = scores_auto.userid
 `
