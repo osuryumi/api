@@ -21,12 +21,12 @@ type userScoresResponse struct {
 
 const userScoreSelectBase = `
 SELECT
-	scores.id, scores.beatmap_md5, scores.score,
-	scores.max_combo, scores.full_combo, scores.mods,
-	scores.300_count, scores.100_count, scores.50_count,
-	scores.gekis_count, scores.katus_count, scores.misses_count,
-	scores.time, scores.play_mode, scores.accuracy, scores.pp,
-	scores.completed,
+	scores_auto.id, scores_auto.beatmap_md5, scores_auto.score,
+	scores_auto.max_combo, scores_auto.full_combo, scores_auto.mods,
+	scores_auto.300_count, scores_auto.100_count, scores_auto.50_count,
+	scores_auto.gekis_count, scores_auto.katus_count, scores_auto.misses_count,
+	scores_auto.time, scores_auto.play_mode, scores_auto.accuracy, scores_auto.pp,
+	scores_auto.completed,
 
 	beatmaps.beatmap_id, beatmaps.beatmapset_id, beatmaps.beatmap_md5,
 	beatmaps.song_name, beatmaps.ar, beatmaps.od, beatmaps.difficulty_std,
@@ -34,35 +34,35 @@ SELECT
 	beatmaps.max_combo, beatmaps.hit_length, beatmaps.ranked,
 	beatmaps.ranked_status_freezed, beatmaps.latest_update
 FROM scores
-INNER JOIN beatmaps ON beatmaps.beatmap_md5 = scores.beatmap_md5
-INNER JOIN users ON users.id = scores.userid
+INNER JOIN beatmaps ON beatmaps.beatmap_md5 = scores_auto.beatmap_md5
+INNER JOIN users ON users.id = scores_auto.userid
 `
 
 // UserScoresBestGET retrieves the best scores of an user, sorted by PP if
 // mode is standard and sorted by ranked score otherwise.
-func UserScoresBestGET(md common.MethodData) common.CodeMessager {
+func UserScoresBestAPGET(md common.MethodData) common.CodeMessager {
 	cm, wc, param := whereClauseUser(md, "users")
 	if cm != nil {
 		return *cm
 	}
 	mc := genModeClause(md)
-	// For all modes that have PP, we leave out 0 PP scores.
+	// For all modes that have PP, we leave out 0 PP scores_auto.
 	if getMode(md.Query("mode")) != "ctb" {
-		mc += " AND scores.pp > 0"
+		mc += " AND scores_auto.pp > 0"
 	}
 	return scoresPuts(md, fmt.Sprintf(
 		`WHERE
-			scores.completed = '3'
+			scores_auto.completed = '3'
 			AND %s
 			%s
 			AND `+md.User.OnlyUserPublic(true)+`
-		ORDER BY scores.pp DESC, scores.score DESC %s`,
+		ORDER BY scores_auto.pp DESC, scores_auto.score DESC %s`,
 		wc, mc, common.Paginate(md.Query("p"), md.Query("l"), 100),
 	), param)
 }
 
-// UserScoresRecentGET retrieves an user's latest scores.
-func UserScoresRecentGET(md common.MethodData) common.CodeMessager {
+// UserScoresRecentGET retrieves an user's latest scores_auto.
+func UserScoresRecentAPGET(md common.MethodData) common.CodeMessager {
 	cm, wc, param := whereClauseUser(md, "users")
 	if cm != nil {
 		return *cm
@@ -72,7 +72,7 @@ func UserScoresRecentGET(md common.MethodData) common.CodeMessager {
 			%s
 			%s
 			AND `+md.User.OnlyUserPublic(true)+`
-		ORDER BY scores.id DESC %s`,
+		ORDER BY scores_auto.id DESC %s`,
 		wc, genModeClause(md), common.Paginate(md.Query("p"), md.Query("l"), 100),
 	), param)
 }

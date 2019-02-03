@@ -11,10 +11,10 @@ import (
 	"gopkg.in/redis.v5"
 	"zxq.co/ripple/rippleapi/app/internals"
 	"zxq.co/ripple/rippleapi/app/peppy"
-	"zxq.co/ripple/rippleapi/app/v1"
+	"github.com/qewc/api/app/v1"
 	"zxq.co/ripple/rippleapi/app/websockets"
 	"zxq.co/ripple/rippleapi/common"
-)
+	)
 
 var (
 	db    *sqlx.DB
