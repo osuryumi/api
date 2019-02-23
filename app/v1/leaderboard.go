@@ -9,8 +9,8 @@ import (
 
 	redis "gopkg.in/redis.v5"
 
-	"zxq.co/ripple/ocl"
-	"zxq.co/ripple/rippleapi/common"
+	"github.com/osuYozora/ocl"
+	"github.com/osuYozora/rippleapi/common"
 )
 
 type leaderboardUser struct {

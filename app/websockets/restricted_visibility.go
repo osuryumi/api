@@ -3,7 +3,7 @@ package websockets
 import (
 	"encoding/json"
 
-	"zxq.co/ripple/rippleapi/common"
+	"github.com/osuYozora/rippleapi/common"
 )
 
 // SetRestrictedVisibility sets whether the information of restricted users

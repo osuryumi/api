@@ -8,7 +8,7 @@ import (
 
 	"database/sql"
 
-	"zxq.co/ripple/rippleapi/common"
+	"github.com/osuYozora/rippleapi/common"
 )
 
 type websocketUser struct {

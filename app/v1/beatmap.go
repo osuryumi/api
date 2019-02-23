@@ -3,7 +3,7 @@ package v1
 import (
 	"database/sql"
 
-	"zxq.co/ripple/rippleapi/common"
+	"github.com/osuYozora/rippleapi/common"
 )
 
 type difficulty struct {

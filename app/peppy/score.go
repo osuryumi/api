@@ -5,7 +5,7 @@ import (
 	"strconv"
 	"strings"
 
-	"zxq.co/ripple/rippleapi/common"
+	"github.com/osuYozora/rippleapi/common"
 
 	"github.com/jmoiron/sqlx"
 	"github.com/valyala/fasthttp"
