@@ -12,7 +12,7 @@ import (
 	"github.com/jmoiron/sqlx"
 
 	"github.com/osuYozora/api/common"
-	"github.com/osuYozora/schiavolib"
+	"zxq.co/ripple/schiavolib"
 )
 
 // TokenSelfDeletePOST deletes the token the user is connecting with.

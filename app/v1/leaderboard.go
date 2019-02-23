@@ -119,3 +119,147 @@ func _position(r *redis.Client, key string, user int) *int {
 	x := int(res.Val()) + 1
 	return &x
 }
+
+// LeaderboardGET gets the leaderboard.
+func LeaderboardRxGET(md common.MethodData) common.CodeMessager {
+	m := getMode(md.Query("mode"))
+
+	// md.Query.Country
+	p := common.Int(md.Query("p")) - 1
+	if p < 0 {
+		p = 0
+	}
+	l := common.InString(1, md.Query("l"), 500, 50)
+
+	key := "ripple:leaderboard_relax:" + m
+	if md.Query("country") != "" {
+		key += ":" + md.Query("country")
+	}
+
+	results, err := md.R.ZRevRange(key, int64(p*l), int64(p*l+l-1)).Result()
+	if err != nil {
+		md.Err(err)
+		return Err500
+	}
+
+	var resp leaderboardResponse
+	resp.Code = 200
+
+	if len(results) == 0 {
+		return resp
+	}
+
+	query := fmt.Sprintf(lbUserQuery+` ORDER BY users_stats.pp_%[1]s_rx DESC, users_stats.ranked_score_%[1]s_rx DESC`, m)
+	query, params, _ := sqlx.In(query, results)
+	rows, err := md.DB.Query(query, params...)
+	if err != nil {
+		md.Err(err)
+		return Err500
+	}
+	for rows.Next() {
+		var u leaderboardUser
+		err := rows.Scan(
+			&u.ID, &u.Username, &u.RegisteredOn, &u.Privileges, &u.LatestActivity,
+
+			&u.UsernameAKA, &u.Country, &u.PlayStyle, &u.FavouriteMode,
+
+			&u.ChosenMode.RankedScore, &u.ChosenMode.TotalScore, &u.ChosenMode.PlayCount,
+			&u.ChosenMode.ReplaysWatched, &u.ChosenMode.TotalHits,
+			&u.ChosenMode.Accuracy, &u.ChosenMode.PP,
+		)
+		if err != nil {
+			md.Err(err)
+			continue
+		}
+		u.ChosenMode.Level = ocl.GetLevelPrecise(int64(u.ChosenMode.TotalScore))
+		if i := leaderboardPositionRx(md.R, m, u.ID); i != nil {
+			u.ChosenMode.GlobalLeaderboardRank = i
+		}
+		if i := countryPositionRx(md.R, m, u.ID, u.Country); i != nil {
+			u.ChosenMode.CountryLeaderboardRank = i
+		}
+		resp.Users = append(resp.Users, u)
+	}
+	return resp
+}
+
+// LeaderboardGET gets the leaderboard.
+func LeaderboardApGET(md common.MethodData) common.CodeMessager {
+	m := getMode(md.Query("mode"))
+
+	// md.Query.Country
+	p := common.Int(md.Query("p")) - 1
+	if p < 0 {
+		p = 0
+	}
+	l := common.InString(1, md.Query("l"), 500, 50)
+
+	key := "ripple:leaderboard_auto:" + m
+	if md.Query("country") != "" {
+		key += ":" + md.Query("country")
+	}
+
+	results, err := md.R.ZRevRange(key, int64(p*l), int64(p*l+l-1)).Result()
+	if err != nil {
+		md.Err(err)
+		return Err500
+	}
+
+	var resp leaderboardResponse
+	resp.Code = 200
+
+	if len(results) == 0 {
+		return resp
+	}
+
+	query := fmt.Sprintf(lbUserQuery+` ORDER BY users_stats.pp_%[1]s_auto DESC, users_stats.ranked_score_%[1]s_ap DESC`, m)
+	query, params, _ := sqlx.In(query, results)
+	rows, err := md.DB.Query(query, params...)
+	if err != nil {
+		md.Err(err)
+		return Err500
+	}
+	for rows.Next() {
+		var u leaderboardUser
+		err := rows.Scan(
+			&u.ID, &u.Username, &u.RegisteredOn, &u.Privileges, &u.LatestActivity,
+
+			&u.UsernameAKA, &u.Country, &u.PlayStyle, &u.FavouriteMode,
+
+			&u.ChosenMode.RankedScore, &u.ChosenMode.TotalScore, &u.ChosenMode.PlayCount,
+			&u.ChosenMode.ReplaysWatched, &u.ChosenMode.TotalHits,
+			&u.ChosenMode.Accuracy, &u.ChosenMode.PP,
+		)
+		if err != nil {
+			md.Err(err)
+			continue
+		}
+		u.ChosenMode.Level = ocl.GetLevelPrecise(int64(u.ChosenMode.TotalScore))
+		if i := leaderboardPositionAp(md.R, m, u.ID); i != nil {
+			u.ChosenMode.GlobalLeaderboardRank = i
+		}
+		if i := countryPositionAp(md.R, m, u.ID, u.Country); i != nil {
+			u.ChosenMode.CountryLeaderboardRank = i
+		}
+		resp.Users = append(resp.Users, u)
+	}
+	return resp
+}
+
+
+func leaderboardPositionRx(r *redis.Client, mode string, user int) *int {
+	return _position(r, "ripple:leaderboard_relax:"+mode, user)
+}
+
+func countryPositionRx(r *redis.Client, mode string, user int, country string) *int {
+	return _position(r, "ripple:leaderboard_relax:"+mode+":"+strings.ToLower(country), user)
+}
+
+
+func leaderboardPositionAp(r *redis.Client, mode string, user int) *int {
+	return _position(r, "ripple:leaderboard_auto:"+mode, user)
+}
+
+func countryPositionAp(r *redis.Client, mode string, user int, country string) *int {
+	return _position(r, "ripple:leaderboard_auto:"+mode+":"+strings.ToLower(country), user)
+}
