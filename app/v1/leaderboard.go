@@ -66,7 +66,7 @@ SELECT
 	users_stats.avg_accuracy_%[1]s_ap, users_stats.pp_%[1]s_auto
 FROM users
 INNER JOIN users_stats ON users_stats.id = users.id
-WHERE users.id IN (?)
+WHERE users.id IN (?) AND prvileges >= 3
 `
 
 
