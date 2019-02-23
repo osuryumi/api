@@ -39,6 +39,36 @@ FROM users
 INNER JOIN users_stats ON users_stats.id = users.id
 WHERE users.id IN (?)
 `
+const lbUserQueryRx = `
+SELECT
+	users.id, users.username, users.register_datetime, users.privileges, users.latest_activity,
+
+	users_stats.username_aka, users_stats.country,
+	users_stats.play_style, users_stats.favourite_mode,
+
+	users_stats.ranked_score_%[1]s_rx, users_stats.total_score_%[1]s_rx, users_stats.playcount_%[1]s_rx,
+	users_stats.replays_watched_%[1]s_rx, users_stats.total_hits_%[1]s_rx,
+	users_stats.avg_accuracy_%[1]s_rx, users_stats.pp_%[1]s_rx
+FROM users
+INNER JOIN users_stats ON users_stats.id = users.id
+WHERE users.id IN (?)
+`
+
+const lbUserQueryAp = `
+SELECT
+	users.id, users.username, users.register_datetime, users.privileges, users.latest_activity,
+
+	users_stats.username_aka, users_stats.country,
+	users_stats.play_style, users_stats.favourite_mode,
+
+	users_stats.ranked_score_%[1]s_ap, users_stats.total_score_%[1]s_ap, users_stats.playcount_%[1]s_ap,
+	users_stats.replays_watched_%[1]s_ap, users_stats.total_hits_%[1]s_ap,
+	users_stats.avg_accuracy_%[1]s_ap, users_stats.pp_%[1]s_auto
+FROM users
+INNER JOIN users_stats ON users_stats.id = users.id
+WHERE users.id IN (?)
+`
+
 
 // LeaderboardGET gets the leaderboard.
 func LeaderboardGET(md common.MethodData) common.CodeMessager {
@@ -149,7 +179,7 @@ func LeaderboardRxGET(md common.MethodData) common.CodeMessager {
 		return resp
 	}
 
-	query := fmt.Sprintf(lbUserQuery+` ORDER BY users_stats.pp_%[1]s_rx DESC, users_stats.ranked_score_%[1]s_rx DESC`, m)
+	query := fmt.Sprintf(lbUserQueryRx+` ORDER BY users_stats.pp_%[1]s_rx DESC, users_stats.ranked_score_%[1]s_rx DESC`, m)
 	query, params, _ := sqlx.In(query, results)
 	rows, err := md.DB.Query(query, params...)
 	if err != nil {
@@ -212,7 +242,7 @@ func LeaderboardApGET(md common.MethodData) common.CodeMessager {
 		return resp
 	}
 
-	query := fmt.Sprintf(lbUserQuery+` ORDER BY users_stats.pp_%[1]s_auto DESC, users_stats.ranked_score_%[1]s_ap DESC`, m)
+	query := fmt.Sprintf(lbUserQueryAp+` ORDER BY users_stats.pp_%[1]s_auto DESC, users_stats.ranked_score_%[1]s_ap DESC`, m)
 	query, params, _ := sqlx.In(query, results)
 	rows, err := md.DB.Query(query, params...)
 	if err != nil {
