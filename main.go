@@ -7,10 +7,10 @@ import (
 	"syscall"
 
 	"github.com/osuYozora/agplwarning"
-	"github.com/osuYozora/rippleapi/app"
-	"github.com/osuYozora/rippleapi/beatmapget"
-	"github.com/osuYozora/rippleapi/common"
-	"github.com/osuYozora/schiavolib"
+	"github.com/osuYozora/api/app"
+	"github.com/osuYozora/api/beatmapget"
+	"github.com/osuYozora/api/common"
+	"zxq.co/ripple/schiavolib"
 	// Golint pls dont break balls
 	_ "github.com/go-sql-driver/mysql"
 	"github.com/jmoiron/sqlx"

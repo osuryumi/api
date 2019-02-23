@@ -9,7 +9,7 @@ import (
 
 	"github.com/jmoiron/sqlx"
 	"github.com/osuYozora/ocl"
-	"github.com/osuYozora/rippleapi/common"
+	"github.com/osuYozora/api/common"
 )
 
 type userData struct {

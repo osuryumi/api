@@ -10,7 +10,7 @@ import (
 	"net"
 
 	"github.com/valyala/fasthttp"
-	"github.com/osuYozora/rippleapi/common"
+	"github.com/osuYozora/api/common"
 )
 
 func startuato(hn fasthttp.RequestHandler) {

@@ -4,7 +4,7 @@ import (
 	"math/rand"
 	"time"
 
-	"github.com/osuYozora/rippleapi/common"
+	"github.com/osuYozora/api/common"
 )
 
 var rn = rand.New(rand.NewSource(time.Now().UnixNano()))

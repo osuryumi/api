@@ -196,7 +196,7 @@
 		},
 		{
 			"checksumSHA1": "+6t1fYk62F/7QAol2NrKdVfQIkE=",
-			"path": "github.com/osuYozora/schiavolib",
+			"path": "zxq.co/ripple/schiavolib",
 			"revision": "9cdc674dad0700ec79618de4ab558db6ad1de372",
 			"revisionTime": "2016-11-09T21:02:50Z"
 		},
@@ -213,5 +213,5 @@
 			"revisionTime": "2017-04-18T18:31:09Z"
 		}
 	],
-	"rootPath": "github.com/osuYozora/rippleapi"
+	"rootPath": "github.com/osuYozora/api"
 }
