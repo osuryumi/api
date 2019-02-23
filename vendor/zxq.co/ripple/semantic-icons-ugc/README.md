@@ -1,1 +1,1 @@
-https://godoc.org/git.github.com/osuYozora/semantic-icons-ugc
+https://godoc.org/git.zxq.co/ripple/semantic-icons-ugc

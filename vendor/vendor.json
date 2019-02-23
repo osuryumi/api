@@ -184,13 +184,13 @@
 		},
 		{
 			"checksumSHA1": "vTjp3tQOr8z8CNjZWwPzgR+t2qQ=",
-			"path": "github.com/osuYozora/agplwarning",
+			"path": "zxq.co/ripple/agplwarning",
 			"revision": "d3a3d0ee424fcb0bd09a651354c1735285f59f8c",
 			"revisionTime": "2018-02-04T10:46:38Z"
 		},
 		{
 			"checksumSHA1": "SI9tgNMlnMhxP7t6cAGuDjvoAHg=",
-			"path": "github.com/osuYozora/ocl",
+			"path": "zxq.co/ripple/ocl",
 			"revision": "b499c4fc6bcd791b59dc994059e6f53cd939cf24",
 			"revisionTime": "2016-05-18T15:55:25Z"
 		},
@@ -202,7 +202,7 @@
 		},
 		{
 			"checksumSHA1": "LflfmgveoAndDoPYavJaQ9XhzGk=",
-			"path": "github.com/osuYozora/semantic-icons-ugc",
+			"path": "zxq.co/ripple/semantic-icons-ugc",
 			"revision": "82d4c266de98a1464887d4e55e1a02b75e71e5c9",
 			"revisionTime": "2016-11-23T19:03:31Z"
 		},

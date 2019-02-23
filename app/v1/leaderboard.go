@@ -9,7 +9,7 @@ import (
 
 	redis "gopkg.in/redis.v5"
 
-	"github.com/osuYozora/ocl"
+	"zxq.co/ripple/ocl"
 	"github.com/osuYozora/api/common"
 )
 

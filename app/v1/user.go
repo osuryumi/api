@@ -8,7 +8,7 @@ import (
 	"unicode"
 
 	"github.com/jmoiron/sqlx"
-	"github.com/osuYozora/ocl"
+	"zxq.co/ripple/ocl"
 	"github.com/osuYozora/api/common"
 )
 

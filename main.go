@@ -6,7 +6,7 @@ import (
 	"strings"
 	"syscall"
 
-	"github.com/osuYozora/agplwarning"
+	"zxq.co/ripple/agplwarning"
 	"github.com/osuYozora/api/app"
 	"github.com/osuYozora/api/beatmapget"
 	"github.com/osuYozora/api/common"

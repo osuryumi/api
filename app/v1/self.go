@@ -4,7 +4,7 @@ import (
 	"strings"
 
 	"github.com/osuYozora/api/common"
-	"github.com/osuYozora/semantic-icons-ugc"
+	"zxq.co/ripple/semantic-icons-ugc"
 )
 
 type donorInfoResponse struct {
