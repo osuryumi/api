@@ -47,7 +47,7 @@ SELECT
 	users_stats.play_style, users_stats.favourite_mode,
 
 	users_stats.ranked_score_%[1]s_rx, users_stats.total_score_%[1]s_rx, users_stats.playcount_%[1]s_rx,
-	users_stats.replays_watched_%[1]s, users_stats.total_hits_%[1]s_rx,
+	users_stats.replays_watched_%[1]s, users_stats.total_hits_%[1]s,
 	users_stats.avg_accuracy_%[1]s_rx, users_stats.pp_%[1]s_rx
 FROM users
 INNER JOIN users_stats ON users_stats.id = users.id
@@ -62,7 +62,7 @@ SELECT
 	users_stats.play_style, users_stats.favourite_mode,
 
 	users_stats.ranked_score_%[1]s_ap, users_stats.total_score_%[1]s_ap, users_stats.playcount_%[1]s_ap,
-	users_stats.replays_watched_%[1]s, users_stats.total_hits_%[1]s_ap,
+	users_stats.replays_watched_%[1]s, users_stats.total_hits_%[1]s,
 	users_stats.avg_accuracy_%[1]s_ap, users_stats.pp_%[1]s_auto
 FROM users
 INNER JOIN users_stats ON users_stats.id = users.id
