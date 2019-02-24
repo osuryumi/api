@@ -86,8 +86,8 @@ func AllClanStatsGET(md common.MethodData) common.CodeMessager {
 		rows *sql.Rows
 		err  error
 	)
-		rows, err = md.DB.Query("SELECT id, name, description, icon FROM clans")
-	
+	rows, err = md.DB.Query("SELECT id, name, description, tag, icon FROM clans")
+
 	if err != nil {
 		md.Err(err)
 		return Err500
@@ -95,7 +95,9 @@ func AllClanStatsGET(md common.MethodData) common.CodeMessager {
 	defer rows.Close()
 	for rows.Next() {
 		nc := clanLbSingle{}
-		err = rows.Scan(&nc.ID, &nc.Name, &nc.Description, &nc.Icon)
+		err = rows.Scan(&nc.ID, &nc.Name, &nc.Description, &nc.Tag, &nc.Icon)
+		fmt.Println(rows)
+		fmt.Println(&nc.Tag)
 		if err != nil {
 			md.Err(err)
 		}
@@ -108,7 +110,7 @@ func AllClanStatsGET(md common.MethodData) common.CodeMessager {
 	r.ResponseBase.Code = 200
 	// anyone who ever looks into this, yes, i need to kill myself. ~Flame
 	m, brr := strconv.ParseInt(string(md.Query("m")[19]), 10, 64)
-	
+
 	if brr != nil {
 		fmt.Println(brr)
 		m = 0
@@ -124,13 +126,12 @@ func AllClanStatsGET(md common.MethodData) common.CodeMessager {
 		n = "std"
 	}
 	fmt.Println(n)
-	
-	
+
 	for i := 0; i < len(r.Clans); i++ {
 		var members clanMembersData
-		
+
 		rid := r.Clans[i].ID
-		
+
 		err := md.DB.Select(&members.Members, `SELECT users.id, users.username, users.register_datetime, users.privileges,
 		latest_activity, users_stats.username_aka,
 		
@@ -152,7 +153,7 @@ func AllClanStatsGET(md common.MethodData) common.CodeMessager {
 		}
 
 		members.Code = 200
-		
+
 		if n == "std" {
 			for u := 0; u < len(members.Members); u++ {
 				r.Clans[i].ChosenMode.PP = r.Clans[i].ChosenMode.PP + members.Members[u].PpStd
@@ -184,17 +185,18 @@ func AllClanStatsGET(md common.MethodData) common.CodeMessager {
 		}
 		r.Clans[i].ChosenMode.PP = (r.Clans[i].ChosenMode.PP / (len(members.Members) + 1))
 	}
-	
+
 	sort.Slice(r.Clans, func(i, j int) bool {
 		return r.Clans[i].ChosenMode.PP > r.Clans[j].ChosenMode.PP
 	})
-	
+
 	for i := 0; i < len(r.Clans); i++ {
-		r.Clans[i].Rank = i+1
-	}	
-	
+		r.Clans[i].Rank = i + 1
+	}
+
 	return r
 }
+
 
 
 
