@@ -2,7 +2,7 @@ package v1
 
 import (
 	"database/sql"
-	"zxq.co/ripple/rippleapi/common"
+	"github.com/osuYozora/api/common"
 	"sort"
 	"fmt"
 	"strconv"
