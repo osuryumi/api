@@ -233,9 +233,6 @@ func TotalClanStatsGET(md common.MethodData) common.CodeMessager {
 	}
 	//RETARD CODE HAHAAAA
 	m, brr := strconv.ParseInt(string(md.Query("m")[11]), 10, 64)
-	if brr != nil {
-		fmt.Println(brr)
-	}
 
 	n := "std"
 	if m == 1 {
@@ -247,8 +244,6 @@ func TotalClanStatsGET(md common.MethodData) common.CodeMessager {
 	} else {
 		n = "std"
 	}
-	fmt.Println(n)
-	
 	
 	for i := 0; i < len(r.Clans); i++ {
 		var members clanMembersData
@@ -270,10 +265,6 @@ func TotalClanStatsGET(md common.MethodData) common.CodeMessager {
 		INNER JOIN users_stats ON users_stats.id = uc.user
 		WHERE clan = ? AND privileges & 1 = 1
 		`, rid)
-
-		if err != nil {
-			fmt.Println(err)
-		}
 
 		members.Code = 200
 		
