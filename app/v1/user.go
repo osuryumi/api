@@ -387,17 +387,17 @@ LIMIT 1
 
 		&b.Icon, &b.Name, &can, &show,
 
-		&r.STD.RankedScore_rx, &r.STD.TotalScore_rx, &r.STD.PlayCount_rx,
-		&r.STD.ReplaysWatched_rx, &r.STD.TotalHits_rx,
-		&r.STD.Accuracy_rx, &r.STD.PP_rx,
+		&r.STD.RankedScore, &r.STD.TotalScore, &r.STD.PlayCount,
+		&r.STD.ReplaysWatched, &r.STD.TotalHits,
+		&r.STD.Accuracy, &r.STD.PP,
 
-		&r.Taiko.RankedScore_rx, &r.Taiko.TotalScore_rx, &r.Taiko.PlayCount_rx,
-		&r.Taiko.ReplaysWatched_rx, &r.Taiko.TotalHits_rx,
-		&r.Taiko.Accuracy_rx, &r.Taiko.PP_rx,
+		&r.Taiko.RankedScore, &r.Taiko.TotalScore, &r.Taiko.PlayCount,
+		&r.Taiko.ReplaysWatched, &r.Taiko.TotalHits,
+		&r.Taiko.Accuracy, &r.Taiko.PP,
 
-		&r.CTB.RankedScore_rx, &r.CTB.TotalScore_rx, &r.CTB.PlayCount_rx,
-		&r.CTB.ReplaysWatched_rx, &r.CTB.TotalHits_rx,
-		&r.CTB.Accuracy_rx, &r.CTB.PP_rx,
+		&r.CTB.RankedScore, &r.CTB.TotalScore, &r.CTB.PlayCount,
+		&r.CTB.ReplaysWatched, &r.CTB.TotalHits,
+		&r.CTB.Accuracy, &r.CTB.PP,
 
 		&r.Mania.RankedScore, &r.Mania.TotalScore, &r.Mania.PlayCount,
 		&r.Mania.ReplaysWatched, &r.Mania.TotalHits,
@@ -511,17 +511,17 @@ LIMIT 1
 
 		&b.Icon, &b.Name, &can, &show,
 
-		&r.STD.RankedScore_ap, &r.STD.TotalScore_ap, &r.STD.PlayCount_ap,
-		&r.STD.ReplaysWatched_ap, &r.STD.TotalHits_ap,
-		&r.STD.Accuracy_ap, &r.STD.PP_auto,
+		&r.STD.RankedScore, &r.STD.TotalScore, &r.STD.PlayCount,
+		&r.STD.ReplaysWatched, &r.STD.TotalHits,
+		&r.STD.Accuracy, &r.STD.PP,
 
-		&r.Taiko.RankedScore_ap, &r.Taiko.TotalScore_ap, &r.Taiko.PlayCount_ap,
-		&r.Taiko.ReplaysWatched_ap, &r.Taiko.TotalHits_ap,
-		&r.Taiko.Accuracy_ap, &r.Taiko.PP_auto,
+		&r.Taiko.RankedScore, &r.Taiko.TotalScore, &r.Taiko.PlayCount,
+		&r.Taiko.ReplaysWatched, &r.Taiko.TotalHits,
+		&r.Taiko.Accuracy, &r.Taiko.PP,
 
-		&r.CTB.RankedScore_ap, &r.CTB.TotalScore_ap, &r.CTB.PlayCount_ap,
-		&r.CTB.ReplaysWatched_ap, &r.CTB.TotalHits_ap,
-		&r.CTB.Accuracy_ap, &r.CTB.PP_auto,
+		&r.CTB.RankedScore, &r.CTB.TotalScore, &r.CTB.PlayCount,
+		&r.CTB.ReplaysWatched, &r.CTB.TotalHits,
+		&r.CTB.Accuracy, &r.CTB.PP,
 
 		&r.Mania.RankedScore, &r.Mania.TotalScore, &r.Mania.PlayCount,
 		&r.Mania.ReplaysWatched, &r.Mania.TotalHits,
