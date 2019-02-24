@@ -206,7 +206,7 @@ type silenceInfo struct {
 	End    common.UnixTimestamp `json:"end"`
 }
 
-// UserFullGET gets all of an user's information, with one exception: their userpage.
+// Rx gets all of an user's information, with one exception: their userpage.
 func UserFullGET(md common.MethodData) common.CodeMessager {
 	shouldRet, whereClause, param := whereClauseUser(md, "users")
 	if shouldRet != nil {
@@ -274,6 +274,254 @@ LIMIT 1
 		&r.CTB.RankedScore, &r.CTB.TotalScore, &r.CTB.PlayCount,
 		&r.CTB.ReplaysWatched, &r.CTB.TotalHits,
 		&r.CTB.Accuracy, &r.CTB.PP,
+
+		&r.Mania.RankedScore, &r.Mania.TotalScore, &r.Mania.PlayCount,
+		&r.Mania.ReplaysWatched, &r.Mania.TotalHits,
+		&r.Mania.Accuracy, &r.Mania.PP,
+
+		&r.SilenceInfo.Reason, &r.SilenceInfo.End,
+		&r.CMNotes, &r.BanDate, &r.Email,
+	)
+	switch {
+	case err == sql.ErrNoRows:
+		return common.SimpleResponse(404, "That user could not be found!")
+	case err != nil:
+		md.Err(err)
+		return Err500
+	}
+
+	can = can && show && common.UserPrivileges(r.Privileges)&common.UserPrivilegeDonor > 0
+	if can && (b.Name != "" || b.Icon != "") {
+		r.CustomBadge = &b
+	}
+
+	for modeID, m := range [...]*modeData{&r.STD, &r.Taiko, &r.CTB, &r.Mania} {
+		m.Level = ocl.GetLevelPrecise(int64(m.TotalScore))
+
+		if i := leaderboardPosition(md.R, modesToReadable[modeID], r.ID); i != nil {
+			m.GlobalLeaderboardRank = i
+		}
+		if i := countryPosition(md.R, modesToReadable[modeID], r.ID, r.Country); i != nil {
+			m.CountryLeaderboardRank = i
+		}
+	}
+
+	rows, err := md.DB.Query("SELECT b.id, b.name, b.icon FROM user_badges ub "+
+		"LEFT JOIN badges b ON ub.badge = b.id WHERE user = ?", r.ID)
+	if err != nil {
+		md.Err(err)
+	}
+
+	for rows.Next() {
+		var badge singleBadge
+		err := rows.Scan(&badge.ID, &badge.Name, &badge.Icon)
+		if err != nil {
+			md.Err(err)
+			continue
+		}
+		r.Badges = append(r.Badges, badge)
+	}
+
+	if md.User.TokenPrivileges&common.PrivilegeManageUser == 0 {
+		r.CMNotes = nil
+		r.BanDate = nil
+		r.Email = ""
+	}
+
+	r.Code = 200
+	return r
+}
+func UserFullGETRx(md common.MethodData) common.CodeMessager {
+	shouldRet, whereClause, param := whereClauseUser(md, "users")
+	if shouldRet != nil {
+		return *shouldRet
+	}
+
+	// Hellest query I've ever done.
+	query := `
+SELECT
+	users.id, users.username, users.register_datetime, users.privileges, users.latest_activity,
+
+	users_stats.username_aka, users_stats.country, users_stats.play_style, users_stats.favourite_mode,
+
+	users_stats.custom_badge_icon, users_stats.custom_badge_name, users_stats.can_custom_badge,
+	users_stats.show_custom_badge,
+
+	users_stats.ranked_score_std_rx, users_stats.total_score_std_rx, users_stats.playcount_std_rx,
+	users_stats.replays_watched_std_rx, users_stats.total_hits_std_rx,
+	users_stats.avg_accuracy_std_rx, users_stats.pp_std_rx,
+
+	users_stats.ranked_score_taiko_rx, users_stats.total_score_taiko_rx, users_stats.playcount_taiko_rx,
+	users_stats.replays_watched_taiko_rx, users_stats.total_hits_taiko_rx,
+	users_stats.avg_accuracy_taiko_rx, users_stats.pp_taiko_rx,
+
+	users_stats.ranked_score_ctb_rx, users_stats.total_score_ctb_rx, users_stats.playcount_ctb_rx,
+	users_stats.replays_watched_ctb_rx, users_stats.total_hits_ctb_rx,
+	users_stats.avg_accuracy_ctb_rx, users_stats.pp_ctb_rx,
+
+	users_stats.ranked_score_mania, users_stats.total_score_mania, users_stats.playcount_mania,
+	users_stats.replays_watched_mania, users_stats.total_hits_mania,
+	users_stats.avg_accuracy_mania, users_stats.pp_mania,
+
+	users.silence_reason, users.silence_end,
+	users.notes, users.ban_datetime, users.email
+
+FROM users
+LEFT JOIN users_stats
+ON users.id=users_stats.id
+WHERE ` + whereClause + ` AND ` + md.User.OnlyUserPublic(true) + `
+LIMIT 1
+`
+	// Fuck.
+	r := userFullResponse{}
+	var (
+		b    singleBadge
+		can  bool
+		show bool
+	)
+	err := md.DB.QueryRow(query, param).Scan(
+		&r.ID, &r.Username, &r.RegisteredOn, &r.Privileges, &r.LatestActivity,
+
+		&r.UsernameAKA, &r.Country,
+		&r.PlayStyle, &r.FavouriteMode,
+
+		&b.Icon, &b.Name, &can, &show,
+
+		&r.STD.RankedScore_rx, &r.STD.TotalScore_rx, &r.STD.PlayCount_rx,
+		&r.STD.ReplaysWatched_rx, &r.STD.TotalHits_rx,
+		&r.STD.Accuracy_rx, &r.STD.PP_rx,
+
+		&r.Taiko.RankedScore_rx, &r.Taiko.TotalScore_rx, &r.Taiko.PlayCount_rx,
+		&r.Taiko.ReplaysWatched_rx, &r.Taiko.TotalHits_rx,
+		&r.Taiko.Accuracy_rx, &r.Taiko.PP_rx,
+
+		&r.CTB.RankedScore_rx, &r.CTB.TotalScore_rx, &r.CTB.PlayCount_rx,
+		&r.CTB.ReplaysWatched_rx, &r.CTB.TotalHits_rx,
+		&r.CTB.Accuracy_rx, &r.CTB.PP_rx,
+
+		&r.Mania.RankedScore, &r.Mania.TotalScore, &r.Mania.PlayCount,
+		&r.Mania.ReplaysWatched, &r.Mania.TotalHits,
+		&r.Mania.Accuracy, &r.Mania.PP,
+
+		&r.SilenceInfo.Reason, &r.SilenceInfo.End,
+		&r.CMNotes, &r.BanDate, &r.Email,
+	)
+	switch {
+	case err == sql.ErrNoRows:
+		return common.SimpleResponse(404, "That user could not be found!")
+	case err != nil:
+		md.Err(err)
+		return Err500
+	}
+
+	can = can && show && common.UserPrivileges(r.Privileges)&common.UserPrivilegeDonor > 0
+	if can && (b.Name != "" || b.Icon != "") {
+		r.CustomBadge = &b
+	}
+
+	for modeID, m := range [...]*modeData{&r.STD, &r.Taiko, &r.CTB, &r.Mania} {
+		m.Level = ocl.GetLevelPrecise(int64(m.TotalScore))
+
+		if i := leaderboardPosition(md.R, modesToReadable[modeID], r.ID); i != nil {
+			m.GlobalLeaderboardRank = i
+		}
+		if i := countryPosition(md.R, modesToReadable[modeID], r.ID, r.Country); i != nil {
+			m.CountryLeaderboardRank = i
+		}
+	}
+
+	rows, err := md.DB.Query("SELECT b.id, b.name, b.icon FROM user_badges ub "+
+		"LEFT JOIN badges b ON ub.badge = b.id WHERE user = ?", r.ID)
+	if err != nil {
+		md.Err(err)
+	}
+
+	for rows.Next() {
+		var badge singleBadge
+		err := rows.Scan(&badge.ID, &badge.Name, &badge.Icon)
+		if err != nil {
+			md.Err(err)
+			continue
+		}
+		r.Badges = append(r.Badges, badge)
+	}
+
+	if md.User.TokenPrivileges&common.PrivilegeManageUser == 0 {
+		r.CMNotes = nil
+		r.BanDate = nil
+		r.Email = ""
+	}
+
+	r.Code = 200
+	return r
+}
+func UserFullGETAp(md common.MethodData) common.CodeMessager {
+	shouldRet, whereClause, param := whereClauseUser(md, "users")
+	if shouldRet != nil {
+		return *shouldRet
+	}
+
+	// Hellest query I've ever done.
+	query := `
+SELECT
+	users.id, users.username, users.register_datetime, users.privileges, users.latest_activity,
+
+	users_stats.username_aka, users_stats.country, users_stats.play_style, users_stats.favourite_mode,
+
+	users_stats.custom_badge_icon, users_stats.custom_badge_name, users_stats.can_custom_badge,
+	users_stats.show_custom_badge,
+
+	users_stats.ranked_score_std_ap, users_stats.total_score_std_ap, users_stats.playcount_std_ap,
+	users_stats.replays_watched_std_ap, users_stats.total_hits_std_ap,
+	users_stats.avg_accuracy_std_ap, users_stats.pp_std_auto,
+
+	users_stats.ranked_score_taiko_ap, users_stats.total_score_taiko_ap, users_stats.playcount_taiko_ap,
+	users_stats.replays_watched_taiko_ap, users_stats.total_hits_taiko_ap,
+	users_stats.avg_accuracy_taiko_ap, users_stats.pp_taiko_auto,
+
+	users_stats.ranked_score_ctb_ap, users_stats.total_score_ctb_ap, users_stats.playcount_ctb_ap,
+	users_stats.replays_watched_ctb_ap, users_stats.total_hits_ctb_ap,
+	users_stats.avg_accuracy_ctb_ap, users_stats.pp_ctb_auto,
+
+	users_stats.ranked_score_mania, users_stats.total_score_mania, users_stats.playcount_mania,
+	users_stats.replays_watched_mania, users_stats.total_hits_mania,
+	users_stats.avg_accuracy_mania, users_stats.pp_mania,
+
+	users.silence_reason, users.silence_end,
+	users.notes, users.ban_datetime, users.email
+
+FROM users
+LEFT JOIN users_stats
+ON users.id=users_stats.id
+WHERE ` + whereClause + ` AND ` + md.User.OnlyUserPublic(true) + `
+LIMIT 1
+`
+	// Fuck.
+	r := userFullResponse{}
+	var (
+		b    singleBadge
+		can  bool
+		show bool
+	)
+	err := md.DB.QueryRow(query, param).Scan(
+		&r.ID, &r.Username, &r.RegisteredOn, &r.Privileges, &r.LatestActivity,
+
+		&r.UsernameAKA, &r.Country,
+		&r.PlayStyle, &r.FavouriteMode,
+
+		&b.Icon, &b.Name, &can, &show,
+
+		&r.STD.RankedScore_ap, &r.STD.TotalScore_ap, &r.STD.PlayCount_ap,
+		&r.STD.ReplaysWatched_ap, &r.STD.TotalHits_ap,
+		&r.STD.Accuracy_ap, &r.STD.PP_auto,
+
+		&r.Taiko.RankedScore_ap, &r.Taiko.TotalScore_ap, &r.Taiko.PlayCount_ap,
+		&r.Taiko.ReplaysWatched_ap, &r.Taiko.TotalHits_ap,
+		&r.Taiko.Accuracy_ap, &r.Taiko.PP_auto,
+
+		&r.CTB.RankedScore_ap, &r.CTB.TotalScore_ap, &r.CTB.PlayCount_ap,
+		&r.CTB.ReplaysWatched_ap, &r.CTB.TotalHits_ap,
+		&r.CTB.Accuracy_ap, &r.CTB.PP_auto,
 
 		&r.Mania.RankedScore, &r.Mania.TotalScore, &r.Mania.PlayCount,
 		&r.Mania.ReplaysWatched, &r.Mania.TotalHits,
