@@ -2,18 +2,18 @@ package v1
 
 import (
 	"database/sql"
-	"github.com/osuYozora/api/common"
-	"sort"
 	"fmt"
+	"sort"
 	"strconv"
+	"github.com/osuYozora/common"
 )
 
 type singleClan struct {
-	ID            int    `json:"id,omitempty"`
-	Name          string `json:"name"`
-	Description   string `json:"description"`
-	Tag          string `json:"tag"`
-	Icon          string `json:"icon"`
+	ID          int    `json:"id,omitempty"`
+	Name        string `json:"name"`
+	Description string `json:"description"`
+	Tag         string `json:"tag"`
+	Icon        string `json:"icon"`
 }
 
 type multiClanData struct {
@@ -53,26 +53,26 @@ func ClansGET(md common.MethodData) common.CodeMessager {
 	return r
 }
 
-
 type clanMembersData struct {
 	common.ResponseBase
 	Members []userNotFullResponseLmao `json:"members"`
 }
+
 // get total stats of clan. later.
 type totalStats struct {
 	common.ResponseBase
-	ClanID         int     `json:"id"`
-	ChosenMode    modeData `json:"chosen_mode"`
-	Rank			int		`json:"rank"`
+	ClanID     int      `json:"id"`
+	ChosenMode modeData `json:"chosen_mode"`
+	Rank       int      `json:"rank"`
 }
 type clanLbSingle struct {
-	ID            int    `json:"id,omitempty"`
-	Name          string `json:"name"`
-	Description   string `json:"description"`
-	Tag           string `json:"tag"`
-	Icon          string `json:"icon"`
-	ChosenMode    modeData `json:"chosen_mode"`
-	Rank          int     `json:"rank"`
+	ID          int      `json:"id,omitempty"`
+	Name        string   `json:"name"`
+	Description string   `json:"description"`
+	Tag         string   `json:"tag"`
+	Icon        string   `json:"icon"`
+	ChosenMode  modeData `json:"chosen_mode"`
+	Rank        int      `json:"rank"`
 }
 
 type megaStats struct {
@@ -115,7 +115,6 @@ func AllClanStatsGET(md common.MethodData) common.CodeMessager {
 		fmt.Println(brr)
 		m = 0
 	}
-	
 	n := "std"
 	if m == 1 {
 		n = "taiko"
@@ -198,17 +197,14 @@ func AllClanStatsGET(md common.MethodData) common.CodeMessager {
 	return r
 }
 
-
-
-
 func TotalClanStatsGET(md common.MethodData) common.CodeMessager {
 	var (
 		r    megaStats
 		rows *sql.Rows
 		err  error
 	)
-		rows, err = md.DB.Query("SELECT id, name, description, icon FROM clans")
-	
+	rows, err = md.DB.Query("SELECT id, name, description, icon FROM clans")
+
 	if err != nil {
 		md.Err(err)
 		return Err500
@@ -235,7 +231,7 @@ func TotalClanStatsGET(md common.MethodData) common.CodeMessager {
 	//RETARD CODE HAHAAAA
 	m, brr := strconv.ParseInt(string(md.Query("m")[11]), 10, 64)
 	if brr != nil {
-		fmt.Printf("%v", brr)
+		fmt.Println(brr)
 	}
 
 	n := "std"
@@ -248,12 +244,13 @@ func TotalClanStatsGET(md common.MethodData) common.CodeMessager {
 	} else {
 		n = "std"
 	}
-	
+	fmt.Println(n)
+
 	for i := 0; i < len(r.Clans); i++ {
 		var members clanMembersData
-		
+
 		rid := r.Clans[i].ID
-		
+
 		err := md.DB.Select(&members.Members, `SELECT users.id, users.username, users.register_datetime, users.privileges,
 		latest_activity, users_stats.username_aka,
 		
@@ -271,11 +268,11 @@ func TotalClanStatsGET(md common.MethodData) common.CodeMessager {
 		`, rid)
 
 		if err != nil {
-			fmt.Printf("%v", brr)
+			fmt.Println(err)
 		}
-		
+
 		members.Code = 200
-		
+
 		if n == "std" {
 			for u := 0; u < len(members.Members); u++ {
 				r.Clans[i].ChosenMode.PP = r.Clans[i].ChosenMode.PP + members.Members[u].PpStd
@@ -315,13 +312,13 @@ func TotalClanStatsGET(md common.MethodData) common.CodeMessager {
 		}
 		r.Clans[i].ChosenMode.PP = (r.Clans[i].ChosenMode.PP / (len(members.Members) + 1))
 	}
-	
+
 	sort.Slice(r.Clans, func(i, j int) bool {
 		return r.Clans[i].ChosenMode.PP > r.Clans[j].ChosenMode.PP
 	})
-	
+
 	for i := 0; i < len(r.Clans); i++ {
-		r.Clans[i].Rank = i+1
+		r.Clans[i].Rank = i + 1
 	}
 	b := totalStats{}
 	for i := 0; i < len(r.Clans); i++ {
@@ -342,9 +339,9 @@ func TotalClanStatsGET(md common.MethodData) common.CodeMessager {
 }
 
 type isClanData struct {
-	Clan	int `json:"clan"`
-	User	int `json:"user"`
-	Perms	int	`json:"perms"`
+	Clan  int `json:"clan"`
+	User  int `json:"user"`
+	Perms int `json:"perms"`
 }
 
 type isClan struct {
@@ -354,19 +351,19 @@ type isClan struct {
 
 func IsInClanGET(md common.MethodData) common.CodeMessager {
 	ui := md.Query("uid")
-	
+
 	if ui == "0" {
 		return ErrMissingField("uid")
 	}
-	
+
 	var r isClan
 	rows, err := md.DB.Query("SELECT user, clan, perms FROM user_clans WHERE user = ?", ui)
-	
+
 	if err != nil {
 		md.Err(err)
 		return Err500
 	}
-	
+
 	defer rows.Close()
 	for rows.Next() {
 		nc := isClanData{}
@@ -385,21 +382,29 @@ func IsInClanGET(md common.MethodData) common.CodeMessager {
 
 type imRetarded struct {
 	common.ResponseBase
-	Invite	string	`json:"invite"`
+	Invite string `json:"invite"`
+}
+type adminClan struct {
+	Id int `json:"user"`
+	Perms   int `json:"perms"`
 }
 
 func ClanInviteGET(md common.MethodData) common.CodeMessager {
 	// big perms check lol ok
 	n := common.Int(md.Query("id"))
-	
+	adminRetard := adminClan{}
+
 	var r imRetarded
 	var clan int
 	// get user clan, then get invite
-		md.DB.QueryRow("SELECT clan FROM user_clans WHERE user = ? LIMIT 1", n).Scan(&clan)
-		row := md.DB.QueryRow("SELECT invite FROM clans_invites WHERE clan = ? LIMIT 1", clan).Scan(&r.Invite)
-		if row != nil {
-			fmt.Println(row)
-		}
+	md.DB.QueryRow("SELECT user, clan, perms FROM user_clans WHERE user = ? LIMIT 1", n).Scan(&adminRetard.Id, &clan, &adminRetard.Perms)
+	if adminRetard.Perms < 8 || adminRetard.Id != md.ID() {
+		return common.SimpleResponse(500, "You are not admin of there clan")
+	}
+	row := md.DB.QueryRow("SELECT invite FROM clans_invites WHERE clan = ? LIMIT 1", clan).Scan(&r.Invite)
+	if row != nil {
+		fmt.Println(row)
+	}
 	return r
 }
 
@@ -413,7 +418,7 @@ func ClanMembersGET(md common.MethodData) common.CodeMessager {
 	if r == 0 {
 		var members clanMembersData
 
-	err := md.DB.Select(&members.Members, `SELECT users.id, users.username, users.register_datetime, users.privileges,
+		err := md.DB.Select(&members.Members, `SELECT users.id, users.username, users.register_datetime, users.privileges,
 	latest_activity, users_stats.username_aka,
 	
 	users_stats.country, users_stats.user_color,
@@ -427,17 +432,17 @@ INNER JOIN users_stats ON users_stats.id = uc.user
 WHERE clan = ?
 ORDER BY id ASC `, i)
 
-	if err != nil {
-		md.Err(err)
-		return Err500
-	}
+		if err != nil {
+			md.Err(err)
+			return Err500
+		}
 
-	members.Code = 200
-	return members
+		members.Code = 200
+		return members
 	} else {
 		var members clanMembersData
 
-	err := md.DB.Select(&members.Members, `SELECT users.id, users.username, users.register_datetime, users.privileges,
+		err := md.DB.Select(&members.Members, `SELECT users.id, users.username, users.register_datetime, users.privileges,
 	latest_activity, users_stats.username_aka,
 	
 	users_stats.country, users_stats.user_color,
@@ -451,12 +456,12 @@ INNER JOIN users_stats ON users_stats.id = uc.user
 WHERE clan = ? AND perms = ?
 ORDER BY id ASC `, i, r)
 
-	if err != nil {
-		md.Err(err)
-		return Err500
-	}
+		if err != nil {
+			md.Err(err)
+			return Err500
+		}
 
-	members.Code = 200
-	return members
+		members.Code = 200
+		return members
 	}
 }
