@@ -348,15 +348,15 @@ SELECT
 	users_stats.show_custom_badge,
 
 	users_stats.ranked_score_std_rx, users_stats.total_score_std_rx, users_stats.playcount_std_rx,
-	users_stats.replays_watched_std, users_stats.total_hits_std_rx,
+	users_stats.replays_watched_std, users_stats.total_hits_std,
 	users_stats.avg_accuracy_std_rx, users_stats.pp_std_rx,
 
 	users_stats.ranked_score_taiko_rx, users_stats.total_score_taiko_rx, users_stats.playcount_taiko_rx,
-	users_stats.replays_watched_taiko, users_stats.total_hits_taiko_rx,
+	users_stats.replays_watched_taiko, users_stats.total_hits_taiko,
 	users_stats.avg_accuracy_taiko_rx, users_stats.pp_taiko_rx,
 
 	users_stats.ranked_score_ctb_rx, users_stats.total_score_ctb_rx, users_stats.playcount_ctb_rx,
-	users_stats.replays_watched_ctb, users_stats.total_hits_ctb_rx,
+	users_stats.replays_watched_ctb, users_stats.total_hits_ctb,
 	users_stats.avg_accuracy_ctb_rx, users_stats.pp_ctb_rx,
 
 	users_stats.ranked_score_mania, users_stats.total_score_mania, users_stats.playcount_mania,
@@ -472,15 +472,15 @@ SELECT
 	users_stats.show_custom_badge,
 
 	users_stats.ranked_score_std_ap, users_stats.total_score_std_ap, users_stats.playcount_std_ap,
-	users_stats.replays_watched_std, users_stats.total_hits_std_ap,
+	users_stats.replays_watched_std, users_stats.total_hits_std,
 	users_stats.avg_accuracy_std_ap, users_stats.pp_std_auto,
 
 	users_stats.ranked_score_taiko_ap, users_stats.total_score_taiko_ap, users_stats.playcount_taiko_ap,
-	users_stats.replays_watched_taiko, users_stats.total_hits_taiko_ap,
+	users_stats.replays_watched_taiko, users_stats.total_hits_taiko,
 	users_stats.avg_accuracy_taiko_ap, users_stats.pp_taiko_auto,
 
 	users_stats.ranked_score_ctb_ap, users_stats.total_score_ctb_ap, users_stats.playcount_ctb_ap,
-	users_stats.replays_watched_ctb, users_stats.total_hits_ctb_ap,
+	users_stats.replays_watched_ctb, users_stats.total_hits_ctb,
 	users_stats.avg_accuracy_ctb_ap, users_stats.pp_ctb_auto,
 
 	users_stats.ranked_score_mania, users_stats.total_score_mania, users_stats.playcount_mania,
