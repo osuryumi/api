@@ -115,6 +115,7 @@ func AllClanStatsGET(md common.MethodData) common.CodeMessager {
 		fmt.Println(brr)
 		m = 0
 	}
+	
 	n := "std"
 	if m == 1 {
 		n = "taiko"
@@ -233,6 +234,9 @@ func TotalClanStatsGET(md common.MethodData) common.CodeMessager {
 	}
 	//RETARD CODE HAHAAAA
 	m, brr := strconv.ParseInt(string(md.Query("m")[11]), 10, 64)
+	if brr != nil {
+		fmt.Printf("%v", brr)
+	}
 
 	n := "std"
 	if m == 1 {
@@ -266,6 +270,10 @@ func TotalClanStatsGET(md common.MethodData) common.CodeMessager {
 		WHERE clan = ? AND privileges & 1 = 1
 		`, rid)
 
+		if err != nil {
+			fmt.Printf("%v", brr)
+		}
+		
 		members.Code = 200
 		
 		if n == "std" {
