@@ -185,6 +185,7 @@ type modeData struct {
 	GlobalLeaderboardRank  *int    `json:"global_leaderboard_rank"`
 	CountryLeaderboardRank *int    `json:"country_leaderboard_rank"`
 }
+
 type userFullResponse struct {
 	common.ResponseBase
 	userData
@@ -201,6 +202,7 @@ type userFullResponse struct {
 	BanDate       *common.UnixTimestamp `json:"ban_date,omitempty"`
 	Email         string                `json:"email,omitempty"`
 }
+
 type silenceInfo struct {
 	Reason string               `json:"reason"`
 	End    common.UnixTimestamp `json:"end"`
@@ -373,7 +375,7 @@ WHERE ` + whereClause + ` AND ` + md.User.OnlyUserPublic(true) + `
 LIMIT 1
 `
 	// Fuck.
-	r := userFullResponse{}
+	r := userFullResponseRx{}
 	var (
 		b    singleBadge
 		can  bool
@@ -422,10 +424,10 @@ LIMIT 1
 	for modeID, m := range [...]*modeData{&r.STD, &r.Taiko, &r.CTB, &r.Mania} {
 		m.Level = ocl.GetLevelPrecise(int64(m.TotalScore))
 
-		if i := leaderboardPosition(md.R, modesToReadable[modeID], r.ID); i != nil {
+		if i := leaderboardPositionRx(md.R, modesToReadable[modeID], r.ID); i != nil {
 			m.GlobalLeaderboardRank = i
 		}
-		if i := countryPosition(md.R, modesToReadable[modeID], r.ID, r.Country); i != nil {
+		if i := countryPositionRx(md.R, modesToReadable[modeID], r.ID, r.Country); i != nil {
 			m.CountryLeaderboardRank = i
 		}
 	}
@@ -471,15 +473,15 @@ SELECT
 	users_stats.custom_badge_icon, users_stats.custom_badge_name, users_stats.can_custom_badge,
 	users_stats.show_custom_badge,
 
-	users_stats.ranked_score_std_ap, users_stats.total_score_std_ap, users_stats.playcount_std_ap,
+	users_stats.ranked_score_std_ap, users_stats.total_score_std, users_stats.playcount_std_ap,
 	users_stats.replays_watched_std, users_stats.total_hits_std,
 	users_stats.avg_accuracy_std_ap, users_stats.pp_std_auto,
 
-	users_stats.ranked_score_taiko_ap, users_stats.total_score_taiko_ap, users_stats.playcount_taiko_ap,
+	users_stats.ranked_score_taiko_ap, users_stats.total_score_taiko, users_stats.playcount_taiko_ap,
 	users_stats.replays_watched_taiko, users_stats.total_hits_taiko,
 	users_stats.avg_accuracy_taiko_ap, users_stats.pp_taiko_auto,
 
-	users_stats.ranked_score_ctb_ap, users_stats.total_score_ctb_ap, users_stats.playcount_ctb_ap,
+	users_stats.ranked_score_ctb_ap, users_stats.total_score_ctb, users_stats.playcount_ctb_ap,
 	users_stats.replays_watched_ctb, users_stats.total_hits_ctb,
 	users_stats.avg_accuracy_ctb_ap, users_stats.pp_ctb_auto,
 
@@ -497,7 +499,7 @@ WHERE ` + whereClause + ` AND ` + md.User.OnlyUserPublic(true) + `
 LIMIT 1
 `
 	// Fuck.
-	r := userFullResponse{}
+	r := userFullResponseAp{}
 	var (
 		b    singleBadge
 		can  bool
@@ -546,10 +548,10 @@ LIMIT 1
 	for modeID, m := range [...]*modeData{&r.STD, &r.Taiko, &r.CTB, &r.Mania} {
 		m.Level = ocl.GetLevelPrecise(int64(m.TotalScore))
 
-		if i := leaderboardPosition(md.R, modesToReadable[modeID], r.ID); i != nil {
+		if i := leaderboardPositionAp(md.R, modesToReadable[modeID], r.ID); i != nil {
 			m.GlobalLeaderboardRank = i
 		}
-		if i := countryPosition(md.R, modesToReadable[modeID], r.ID, r.Country); i != nil {
+		if i := countryPositionAp(md.R, modesToReadable[modeID], r.ID, r.Country); i != nil {
 			m.CountryLeaderboardRank = i
 		}
 	}
