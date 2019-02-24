@@ -375,7 +375,7 @@ WHERE ` + whereClause + ` AND ` + md.User.OnlyUserPublic(true) + `
 LIMIT 1
 `
 	// Fuck.
-	r := userFullResponseRx{}
+	r := userFullResponse{}
 	var (
 		b    singleBadge
 		can  bool
@@ -499,7 +499,7 @@ WHERE ` + whereClause + ` AND ` + md.User.OnlyUserPublic(true) + `
 LIMIT 1
 `
 	// Fuck.
-	r := userFullResponseAp{}
+	r := userFullResponse{}
 	var (
 		b    singleBadge
 		can  bool
