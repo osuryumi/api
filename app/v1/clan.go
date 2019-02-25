@@ -109,12 +109,8 @@ func AllClanStatsGET(md common.MethodData) common.CodeMessager {
 	}
 	r.ResponseBase.Code = 200
 	// anyone who ever looks into this, yes, i need to kill myself. ~Flame
-	m, brr := strconv.ParseInt(string(md.Query("m")[19]), 10, 64)
+	m := strconv.ParseInt(string(md.Query("m")[19]), 10, 64)
 
-	if brr != nil {
-		fmt.Println(brr)
-		m = 0
-	}
 	n := "std"
 	if m == 1 {
 		n = "taiko"
@@ -147,10 +143,6 @@ func AllClanStatsGET(md common.MethodData) common.CodeMessager {
 		INNER JOIN users_stats ON users_stats.id = uc.user
 		WHERE clan = ? AND privileges > 2
 		`, rid)
-
-		if err != nil {
-			fmt.Println(err)
-		}
 
 		members.Code = 200
 
