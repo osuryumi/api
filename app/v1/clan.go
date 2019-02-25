@@ -157,6 +157,7 @@ func AllClanStatsGET(md common.MethodData) common.CodeMessager {
 		members.Code = 200
 		
 		if n == "std" {
+			fmt.Printf("%v", r.Clans)
 			for u := 0; u < len(members.Members); u++ {
 				r.Clans[i].ChosenMode.PP = r.Clans[i].ChosenMode.PP + members.Members[u].PpStd
 				r.Clans[i].ChosenMode.RankedScore = r.Clans[i].ChosenMode.RankedScore + members.Members[u].RankedScoreStd
