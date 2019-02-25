@@ -89,8 +89,8 @@ func AllClanStatsGET(md common.MethodData) common.CodeMessager {
 		rows, err = md.DB.Query("SELECT id, name, description, icon FROM clans")
 	
 	if err != nil {
+		fmt.Println("lol")
 		md.Err(err)
-		return Err500
 	}
 	defer rows.Close()
 	for rows.Next() {
@@ -103,6 +103,7 @@ func AllClanStatsGET(md common.MethodData) common.CodeMessager {
 		r.Clans = append(r.Clans, nc)
 	}
 	if err := rows.Err(); err != nil {
+		fmt.Println("lol 2")
 		md.Err(err)
 	}
 	r.ResponseBase.Code = 200
@@ -110,6 +111,7 @@ func AllClanStatsGET(md common.MethodData) common.CodeMessager {
 	m, brr := strconv.ParseInt(string(md.Query("m")[19]), 10, 64)
 	
 	if brr != nil {
+		fmt.Println("lol 3")
 		fmt.Println(brr)
 		m = 0
 	}
@@ -148,6 +150,7 @@ func AllClanStatsGET(md common.MethodData) common.CodeMessager {
 		`, rid)
 
 		if err != nil {
+			fmt.Println("lol 4")
 			fmt.Println(err)
 		}
 
