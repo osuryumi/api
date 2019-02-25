@@ -7,9 +7,9 @@ import (
 	"syscall"
 
 	"zxq.co/ripple/agplwarning"
-	"github.com/osuYozora/api/app"
-	"github.com/osuYozora/api/beatmapget"
-	"github.com/osuYozora/api/common"
+	"github.com/osuyozora/api/app"
+	"github.com/osuyozora/api/beatmapget"
+	"github.com/osuyozora/api/common"
 	"zxq.co/ripple/schiavolib"
 	// Golint pls dont break balls
 	_ "github.com/go-sql-driver/mysql"

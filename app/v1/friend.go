@@ -3,7 +3,7 @@ package v1
 import (
 	"database/sql"
 
-	"github.com/osuYozora/api/common"
+	"github.com/osuyozora/api/common"
 )
 
 type friendData struct {

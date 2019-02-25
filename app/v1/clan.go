@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"sort"
 	"strconv"
-	"github.com/osuYozora/api/common"
+	"github.com/osuyozora/api/common"
 )
 
 type singleClan struct {

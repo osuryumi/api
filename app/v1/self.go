@@ -3,7 +3,7 @@ package v1
 import (
 	"strings"
 
-	"github.com/osuYozora/api/common"
+	"github.com/osuyozora/api/common"
 	"zxq.co/ripple/semantic-icons-ugc"
 )
 

@@ -286,7 +286,7 @@ func (c *Client) Timing(name string, value time.Duration, tags []string, rate fl
 }
 
 // TimeInMilliseconds sends timing information in milliseconds.
-// It is flushed by statsd with percentiles, mean and other info (https://github.com/etsy/statsd/blob/master/docs/metric_types.md#timing)
+// It is flushed by statsd with percentiles, mean and other info (.com/etsy/statsd/blob/master/docs/metric_types.md#timing)
 func (c *Client) TimeInMilliseconds(name string, value float64, tags []string, rate float64) error {
 	stat := fmt.Sprintf("%f|ms", value)
 	return c.send(name, stat, tags, rate)

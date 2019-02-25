@@ -10,7 +10,7 @@ import (
 	"strings"
 	"time"
 
-	"github.com/osuYozora/api/common"
+	"github.com/osuyozora/api/common"
 )
 
 // This basically proxies requests from Medium's API and is used on Ripple's

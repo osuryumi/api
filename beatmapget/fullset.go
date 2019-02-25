@@ -5,7 +5,7 @@ import (
 	"errors"
 	"time"
 
-	"github.com/osuYozora/api/common"
+	"github.com/osuyozora/api/common"
 	"gopkg.in/thehowl/go-osuapi.v1"
 )
 

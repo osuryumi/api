@@ -5,7 +5,7 @@ package v1
 import (
 	"time"
 
-	"github.com/osuYozora/api/common"
+	"github.com/osuyozora/api/common"
 )
 
 // MetaRestartGET restarts the API with Zero Downtime™.

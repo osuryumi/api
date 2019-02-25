@@ -11,7 +11,7 @@ import (
 
 	"github.com/jmoiron/sqlx"
 
-	"github.com/osuYozora/api/common"
+	"github.com/osuyozora/api/common"
 	"zxq.co/ripple/schiavolib"
 )
 

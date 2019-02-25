@@ -8,7 +8,7 @@ import (
 	"time"
 
 	"github.com/jmoiron/sqlx"
-	"github.com/osuYozora/api/common"
+	"github.com/osuyozora/api/common"
 )
 
 // GetTokenFull retrieves an user ID and their token privileges knowing their API token.

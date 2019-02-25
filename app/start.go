@@ -9,11 +9,11 @@ import (
 	"github.com/getsentry/raven-go"
 	"github.com/jmoiron/sqlx"
 	"gopkg.in/redis.v5"
-	"github.com/osuYozora/api/app/internals"
-	"github.com/osuYozora/api/app/peppy"
-	"github.com/osuYozora/api/app/v1"
-	"github.com/osuYozora/api/app/websockets"
-	"github.com/osuYozora/api/common"
+	"github.com/osuyozora/api/app/internals"
+	"github.com/osuyozora/api/app/peppy"
+	"github.com/osuyozora/api/app/v1"
+	"github.com/osuyozora/api/app/websockets"
+	"github.com/osuyozora/api/common"
 	)
 
 var (
