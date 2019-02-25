@@ -92,7 +92,6 @@ func AllClanStatsGET(md common.MethodData) common.CodeMessager {
 		md.Err(err)
 		return Err500
 	}
-	
 	defer rows.Close()
 	for rows.Next() {
 		nc := clanLbSingle{}
@@ -110,9 +109,12 @@ func AllClanStatsGET(md common.MethodData) common.CodeMessager {
 	}
 	r.ResponseBase.Code = 200
 	// anyone who ever looks into this, yes, i need to kill myself. ~Flame
-	m := strconv.ParseInt(string(md.Query("m")[19]), 10, 64)
+	m, brr := strconv.ParseInt(string(md.Query("m")[19]), 10, 64)
 
-
+	if brr != nil {
+		fmt.Println(brr)
+		m = 0
+	}
 	n := "std"
 	if m == 1 {
 		n = "taiko"
@@ -143,10 +145,14 @@ func AllClanStatsGET(md common.MethodData) common.CodeMessager {
 		INNER JOIN users
 		ON users.id = uc.user
 		INNER JOIN users_stats ON users_stats.id = uc.user
-		WHERE clan = ? AND privileges >= 3
+		WHERE clan = ? AND privileges > 2
 		`, rid)
 
-    	members.Code = 200
+		if err != nil {
+			fmt.Println(err)
+		}
+
+		members.Code = 200
 
 		if n == "std" {
 			for u := 0; u < len(members.Members); u++ {
