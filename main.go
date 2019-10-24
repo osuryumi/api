@@ -7,12 +7,12 @@ import (
 	"syscall"
 
 	"zxq.co/ripple/agplwarning"
-	"github.com/osuyozora/api/app"
-	"github.com/osuyozora/api/beatmapget"
-	"github.com/osuyozora/api/common"
+	"github.com/osu-minase/api/tree/master/app"
+	"github.com/osuyozora//tree/master/beatmapget"
+	"github.com/osuyozora/tree/master/common"
 	"zxq.co/ripple/schiavolib"
 	// Golint pls dont break balls
-	_ "github.com/go-sql-driver/mysql"
+	"github.com/go-sql-driver/mysql"
 	"github.com/jmoiron/sqlx"
 	"github.com/serenize/snaker"
 	"gopkg.in/thehowl/go-osuapi.v1"
