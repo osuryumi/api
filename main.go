@@ -7,9 +7,9 @@ import (
 	"syscall"
 
 	"zxq.co/ripple/agplwarning"
-	"github.com/osu-minase/api/tree/master/app"
-	"github.com/osuyozora//tree/master/beatmapget"
-	"github.com/osuyozora/tree/master/common"
+	"github.com/osu-minase/api/app"
+	"github.com/osuyozora/api/beatmapget"
+	"github.com/osuyozora/api/common"
 	"zxq.co/ripple/schiavolib"
 	// Golint pls dont break balls
 	"github.com/go-sql-driver/mysql"
@@ -36,7 +36,7 @@ func main() {
 		fmt.Println(err)
 	}
 
-	fmt.Print("Ripple API")
+	fmt.Print("Ryumi API")
 	if Version != "" {
 		fmt.Print("; git commit hash: ", Version)
 	}
